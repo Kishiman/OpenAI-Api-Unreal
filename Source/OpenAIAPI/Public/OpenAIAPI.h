@@ -5,15 +5,16 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FOpenAIAPIModule : public IModuleInterface
-{
-	friend class UOpenAIUtils;
+class FOpenAIAPIModule : public IModuleInterface {
+  friend class UOpenAIUtils;
+
 public:
-	/** IModuleInterface implementation */
-	virtual void StartupModule() override;
-	virtual void ShutdownModule() override;
+  /** IModuleInterface implementation */
+  virtual void StartupModule() override;
+  virtual void ShutdownModule() override;
+  TMap<FString, FString> LoadConfigFile();
 
 private:
-	FString _apiKey = "";
-	bool _useApiKeyFromEnvVariable = false;
+  FString _apiKey = "";
+  bool _useApiKeyFromEnvVariable = true;
 };

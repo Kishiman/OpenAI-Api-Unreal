@@ -1,49 +1,51 @@
 // Copyright Kellan Mythen 2023. All rights Reserved.
 
-
 #include "OpenAIUtils.h"
-#include "OpenAIDefinitions.h"
-#include "OpenAIAPI.h"
 #include "Modules/ModuleManager.h"
+#include "OpenAIAPI.h"
+#include "OpenAIDefinitions.h"
 
-void UOpenAIUtils::setOpenAIApiKey(FString apiKey)
-{
-	FOpenAIAPIModule& mod = FModuleManager::Get().LoadModuleChecked<FOpenAIAPIModule>("OpenAIAPI");
-	mod._apiKey = apiKey;
+#include "GenericPlatform/GenericPlatformMisc.h"
+
+void UOpenAIUtils::setOpenAIApiKey(FString apiKey) {
+  FOpenAIAPIModule &mod =
+      FModuleManager::Get().LoadModuleChecked<FOpenAIAPIModule>("OpenAIAPI");
+  mod._apiKey = apiKey;
 }
 
-FString UOpenAIUtils::getApiKey()
-{
-	FOpenAIAPIModule& mod = FModuleManager::Get().LoadModuleChecked<FOpenAIAPIModule>("OpenAIAPI");
-	return mod._apiKey;
+FString UOpenAIUtils::getApiKey() {
+  FOpenAIAPIModule &mod =
+      FModuleManager::Get().LoadModuleChecked<FOpenAIAPIModule>("OpenAIAPI");
+  return mod._apiKey;
 }
 
-void UOpenAIUtils::	setUseOpenAIApiKeyFromEnvironmentVars(bool bUseEnvVariable)
-{
-	FOpenAIAPIModule& mod = FModuleManager::Get().LoadModuleChecked<FOpenAIAPIModule>("OpenAIAPI");
-	mod._useApiKeyFromEnvVariable = bUseEnvVariable;
+void UOpenAIUtils::setUseOpenAIApiKeyFromEnvironmentVars(bool bUseEnvVariable) {
+  FOpenAIAPIModule &mod =
+      FModuleManager::Get().LoadModuleChecked<FOpenAIAPIModule>("OpenAIAPI");
+  mod._useApiKeyFromEnvVariable = bUseEnvVariable;
 }
 
-bool UOpenAIUtils::getUseApiKeyFromEnvironmentVars()
-{
+bool UOpenAIUtils::getUseApiKeyFromEnvironmentVars() {
 
-	FOpenAIAPIModule& mod = FModuleManager::Get().LoadModuleChecked<FOpenAIAPIModule>("OpenAIAPI");
-	return mod._useApiKeyFromEnvVariable;
+  FOpenAIAPIModule &mod =
+      FModuleManager::Get().LoadModuleChecked<FOpenAIAPIModule>("OpenAIAPI");
+  return mod._useApiKeyFromEnvVariable;
 }
 
-FString UOpenAIUtils::GetEnvironmentVariable(FString key)
-{
-	FString result;
+FString UOpenAIUtils::GetEnvironmentVariable(FString key) {
+  FString result;
+  result = FGenericPlatformMisc::GetEnvironmentVariable(*key);
+  return result;
+
 #if PLATFORM_WINDOWS
-	result = FWindowsPlatformMisc::GetEnvironmentVariable(*key);
+  result = FWindowsPlatformMisc::GetEnvironmentVariable(*key);
 #endif
 #if PLATFORM_MAC
-	result = FApplePlatformMisc::GetEnvironmentVariable(*key); 
+  result = FApplePlatformMisc::GetEnvironmentVariable(*key);
 #endif
 
 #if PLATFORM_LINUX
-	result = FLinuxPlatformMisc::GetEnvironmentVariable(*key);
+  result = FLinuxPlatformMisc::GetEnvironmentVariable(*key);
 #endif
-	return result;
+  return result;
 }
-

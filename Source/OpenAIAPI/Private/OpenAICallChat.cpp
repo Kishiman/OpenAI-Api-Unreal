@@ -25,11 +25,7 @@ UOpenAICallChat* UOpenAICallChat::OpenAICallChat(FChatSettings chatSettingsInput
 
 void UOpenAICallChat::Activate()
 {
-	FString _apiKey;
-	if (UOpenAIUtils::getUseApiKeyFromEnvironmentVars())
-		_apiKey = UOpenAIUtils::GetEnvironmentVariable(TEXT("OPENAI_API_KEY"));
-	else
-		_apiKey = UOpenAIUtils::getApiKey();
+	FString _apiKey= UOpenAIUtils::getApiKey();
 	
 	// checking parameters are valid
 	if (_apiKey.IsEmpty())
