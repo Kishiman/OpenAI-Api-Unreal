@@ -8,7 +8,8 @@
 
 #define LOCTEXT_NAMESPACE "FOpenAIAPIModule"
 
-TMap<FString, FString> FOpenAIAPIModule::LoadConfigFile() {
+TMap<FString, FString> FOpenAIAPIModule::LoadConfigFile()
+{
   UE_LOG(LogTemp, Warning, TEXT("LoadConfigFile"));
   FString ConfigFilePath = FPaths::ProjectDir() / TEXT(".ini");
   FString ConfigFileContents;
@@ -17,11 +18,13 @@ TMap<FString, FString> FOpenAIAPIModule::LoadConfigFile() {
   TArray<FString> ConfigLines;
   ConfigFileContents.ParseIntoArrayLines(ConfigLines);
   TMap<FString, FString> config;
-  for (const FString &ConfigLine : ConfigLines) {
+  for (const FString &ConfigLine : ConfigLines)
+  {
     TArray<FString> ConfigPair;
     ConfigLine.ParseIntoArray(ConfigPair, TEXT("="), true);
 
-    if (ConfigPair.Num() == 2) {
+    if (ConfigPair.Num() == 2)
+    {
       FString ConfigKey = ConfigPair[0];
       FString ConfigValue = ConfigPair[1];
       UE_LOG(LogTemp, Warning, TEXT("%s=%s"), *ConfigKey, *ConfigValue);
@@ -31,10 +34,13 @@ TMap<FString, FString> FOpenAIAPIModule::LoadConfigFile() {
   return config;
 }
 
-void FOpenAIAPIModule::StartupModule() {
-  auto map = LoadConfigFile();
-  if (this->_useApiKeyFromEnvVariable) {
-    this->_apiKey = map[FString("OPENAI_API_KEY")];
+void FOpenAIAPIModule::StartupModule()
+{
+  auto config = LoadConfigFile();
+  if (this->_useApiKeyFromEnvVariable)
+  {
+    if (config.Contains(FString("OPENAI_API_KEY")))
+      this->_apiKey = config[FString("OPENAI_API_KEY")];
   }
   FString apiKey = UOpenAIUtils::getApiKey();
   UE_LOG(LogTemp, Warning, TEXT("APIKEY %s"), *apiKey);
@@ -42,7 +48,8 @@ void FOpenAIAPIModule::StartupModule() {
   // timing is specified in the .uplugin file per-module
 }
 
-void FOpenAIAPIModule::ShutdownModule() {
+void FOpenAIAPIModule::ShutdownModule()
+{
   // This function may be called during shutdown to clean up your module.  For
   // modules that support dynamic reloading, we call this function before
   // unloading the module.
